@@ -16,8 +16,6 @@ class User: #Creating a User class
         else:
             self.isAdmin = False
             
-class Admin:
-   def __init__(self, user:User):
         
     
             
