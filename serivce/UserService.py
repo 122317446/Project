@@ -1,4 +1,4 @@
-from userdao.UserDAO import UserDAO
+from dao.UserDAO import UserDAO
 from model.User import User
 
 class UserService:
