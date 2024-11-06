@@ -21,6 +21,6 @@ class ProductDAO:
     
     def getProductbyID(self, prodID):
         for product in self.products:
-            if Product.prodID == prodID:
-                return Product
+            if product.prodID == prodID:
+                return product
         return None
