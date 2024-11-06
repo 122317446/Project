@@ -8,13 +8,13 @@ app = Flask(__name__)
 product_service = ProductService()
 
 @app.route('/')
-def Landing_Page():
-    return render_template('LandingPage.html')
-
-@app.route('/Productlistings')
 def show_products():
     products = product_service.get_all_products()
-    return render_template('Productlistings.html', products=products)
+    return render_template('ProductSpread.html', products=products)
+
+'''@app.route('/page2')
+def Landing_Page():
+    return render_template('LandingPage.html')'''
 
 if __name__ == "__main__":
     app.run(debug=True)
