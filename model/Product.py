@@ -4,7 +4,7 @@
 class Product:
     # Attributes specific to all products
     def __init__(self, prodID, prodName, prodDesc, prodPrice, 
-                 prodStock, prodWarr):
+                 prodStock, prodWarr, prodImage=None):
         
         self.prodID = prodID
         self.prodName = prodName
@@ -12,6 +12,7 @@ class Product:
         self.prodPrice = prodPrice
         self.prodStock = prodStock
         self.prodWarr = prodWarr
+        self.prodImage = prodImage
         
 # abstract method will be passed, 
 # child classes will have their own implementation of the method (Polymorphism)
