@@ -15,7 +15,8 @@ def show_products():
 @app.route('/Product/<int:prodID>')
 def select_product(prodID):
     product = product_service.get_product_details(prodID)
-    return render_template('Product.html', product=product)
+    products = product_service.get_all_products()
+    return render_template('Product.html', product=product, products=products)
 
 if __name__ == "__main__":
     app.run(debug=True)
