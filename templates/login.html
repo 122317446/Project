@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Using a Bootstrap login form and linking it with the website-->
+    <div class="col-md-6 login-form-1">
+        <h3>Log-in to your account</h3>
+        <br>
+        <form method = "post"> <!-- Using post method ensures Python can pull data from the inputs in order to be compared to the DB-->
+            <div class="form-group">
+                <input type="text" class="form-control" name="email" placeholder="Your Email *" value="{{request.form['email']}}" /> <!-- value is written through python in order to be referenced -->
+            </div>
+            <br>
+            <div class="form-group">
+                <input type="password" class="form-control" name="password" placeholder="Your Password *" value="{{request.form['password']}}" />
+            </div>
+            <br>
+            <div class="form-group">
+                <input type="submit" class="btnSubmit" value="Login" />
+            </div>
+            <div class="form-group">
+                <a href={{url_for('signUp')}} class="noAccount">Don't have an account? Click here</a>
+                <!-- Redirecting user to creating an acccount if they currently have none-->
+            </div>
+        </form>
+    </div>
+
+
+{% endblock %}

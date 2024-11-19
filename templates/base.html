@@ -1,3 +1,4 @@
+<!-- Adding a base.html to make navigation bar and footer design static for the whole website-->
 <!DOCTYPE html>
 <html lang="en">
     
@@ -13,6 +14,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+        <!-- Linking files through Flask instead of HTML -->
     </head>
 
     <body>
@@ -34,7 +36,7 @@
                             </ul>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                        <li class="nav-item dropdown"><a class="nav-link" href="#!">Account</a></li>
+                        <li class="nav-item dropdown"><a class="nav-link" href="{{url_for('loginAccount')}}">Account</a></li>
                     </ul>
                     <form class="d-flex">
                         <button class="btn btn-outline-dark" type="submit">
@@ -47,12 +49,12 @@
             </div>
         </nav>
 
-    {% block content %} {% endblock %}
+    {% block content %} <!-- Different webpage content will be placed here--> {% endblock %} 
     </body>
 
     <!-- Footer-->
     <footer class="py-5 bg-dark">
-        <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
+        <div class="container"><p class="m-0 text-center text-white">Copyright &copy; MTL 2024</p></div>
     </footer>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

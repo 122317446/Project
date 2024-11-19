@@ -10,12 +10,9 @@ class UserDAO:
     def getAllUsers(self):
         if not self.user_list: #Check if the list is empty
             #Create default users if list is empty
-            user_manager = User("John", "Doe", "John@gmail.com", "pw1", True)
-            user_employee = User("Daniel", "Doe", "Daniel@gmail.com", "pw2", False)
+            user_admin = User(1, 'K', 'C', 'kc@gmail.com', '12345', 'IE', 0000, True)
             
-            self.user_list.append(user_manager)
-            self.user_list.append(user_employee)
-            
+            self.user_list.append(user_admin)           
         return self.user_list
     
     #Add a new user to the list

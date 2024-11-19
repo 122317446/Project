@@ -8161,7 +8161,7 @@ textarea.form-control-lg {
 
 .bg-dark {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;
+  background-color: #E7C17A;
 }
 
 .bg-black {
@@ -10823,4 +10823,53 @@ textarea.form-control-lg {
   .d-print-none {
     display: none !important;
   }
+}
+
+.login-container{
+  margin: 5% auto; 
+  text-align: center;
+
+}
+.login-form-1{
+  padding: 5%;
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+  margin: 5% auto; 
+  text-align: center;
+  width: 800px; 
+}
+.login-form-1 h3{
+  text-align: center;
+  color: #333;
+}
+
+.login-container form{
+  padding: 10%;
+}
+.btnSubmit
+{
+  width: 50%;
+  border-radius: 1rem;
+  padding: 1.5%;
+  border: none;
+  cursor: pointer;
+}
+.login-form-1 .btnSubmit{
+  font-weight: 600;
+  color: #fff;
+  background-color: #D89D30;
+}
+
+.login-form-1 .noAccount{
+  color: #D89D30;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.alert {
+  padding: 20px;
+  margin: 5px;
+  color: #060702;
+  background-color: #ffd5de;
+  border: 3px solid #000;
+  text-align: center;
 }

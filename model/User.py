@@ -1,8 +1,9 @@
 class User: #Creating a User class
     
-    def __init__(self, firstName, lastName, userEmail, userPassword, userAdress, userPhone, isAdmin=None):
+    def __init__(self, userID, firstName, lastName, userEmail, userPassword, userAdress, userPhone, isAdmin=None):
         
         #Initialising all the parameters
+        self.userID = userID
         self.firsName = firstName
         self.lastName = lastName
         self.userEmail = userEmail
