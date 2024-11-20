@@ -1,5 +1,6 @@
 from dao.UserDAO import UserDAO
 from model.User import User
+from validation.UserValidation import UserValidation
 
 class UserService:
     
@@ -7,8 +8,11 @@ class UserService:
         
         #Create an instance of UserDAO to handle user data
         self.userDAO = UserDAO()
-        '''self.userValidation = UserValidation'''
+        self.userValidation = UserValidation()
         
+    def get_all_users(self):
+        return self.userDAO.getAllUsers()
+    
     
     def login(self, email, password): #Creating login function
         
@@ -26,23 +30,22 @@ class UserService:
                     return True
                 else:
                     return False
-            else:
-                #If no matching user is found, display an error message
-                if user_found == False:
-                    #Alert or prompt user account is not found
-                    return None
-                
-            
-    def signUp(self, firstname, lastname, email, address, phone, password):
         
-        if (self.userValidation.checkEmail(self.userDAO.getAllUsers(), email)
-            and self.userValidation.checkPassword(password)):
+        return None
+       
+             
+          
+    def signUp(self, firstName, lastName, userEmail, userPassword, userAdress, userPhone):
+        
+        if (self.userValidation.checkEmail(self.userDAO.getAllUsers(), userEmail)
+            and self.userValidation.checkPassword(userPassword)):
             
-            userToCreate = User(firstname, lastname, email, address, phone, password)
+            idcount = len(self.get_all_users()) + 1 
+            
+            userToCreate = User(idcount, firstName, lastName, userEmail, userPassword, userAdress, userPhone, isAdmin=None)
             self.userDAO.createUser(userToCreate)
+            return True
             #Redirect user to homepage with the newly created account
         else:
             #Alert or prompt user that account creation has failed
-            self.signUp() #Recursive call 
-            
-        
+            return False

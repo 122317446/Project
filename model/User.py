@@ -15,10 +15,7 @@ class User: #Creating a User class
         if isAdmin is not None:
             self.isAdmin = isAdmin
         else:
-            self.isAdmin = False
-            
-        
-    
+            self.isAdmin = False  
             
     
         

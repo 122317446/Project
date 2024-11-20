@@ -4,29 +4,29 @@
     <div class="col-md-6 login-form-1">
         <h3>Create an account</h3>
         <br>
-        <form>
+        <form method = "post">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="First name" value="" />
+                <input type="text" class="form-control" name="fname" placeholder="First name" value="{{request.form['fname']}}" />
             </div>
             <br>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Last name" value="" />
+                <input type="text" class="form-control" name="lname" placeholder="Last name" value="{{request.form['lname']}}" />
             </div>
             <br>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Enter an email" value="" />
+                <input type="text" class="form-control" name="email" placeholder="Enter an email" value="{{request.form ['email']}}" />
             </div>
             <br>
             <div class="form-group">
-                <input type="password" class="form-control" placeholder="Create a password" value="" />
+                <input type="password" class="form-control" name="password" placeholder="Create a password" value="{{request.form['password']}}" />
             </div>
             <br>
             <div class="form-group">
-                <input type="address" class="form-control" placeholder="Home address" value="" />
+                <input type="address" class="form-control" name="address" placeholder="Home address" value="{{request.form['address']}}" />
             </div>
             <br>
             <div class="form-group">
-                <input type="phone" class="form-control" placeholder="Phone number" value="" />
+                <input type="phone" class="form-control" name="phone" placeholder="Phone number" value="{{request.form['phone']}}" />
             </div>
             <br>
             <div class="form-group">

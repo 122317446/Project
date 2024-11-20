@@ -4,7 +4,7 @@ class UserValidation:
     def __init__(self):
         pass
     
-    def checkEmail(userlist, email):
+    def checkEmail(self, userlist, email):
         if "@" not in email or "." not in email: #Not too important
             print("Email doesn't have the key characters '@' and '.'.")
             return False
@@ -16,7 +16,7 @@ class UserValidation:
             
         return True
     
-    def checkPassword(password):
+    def checkPassword(self, password):
         pattern = re.compile(r'[^a-zA-Z0-9]') #Use chatGPT to create a character check 
         if len(password) < 10:
             print("Password must be at least 10 characters long")

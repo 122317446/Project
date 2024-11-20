@@ -24,25 +24,45 @@ def select_product(prodID):
 @app.route('/login', methods=('GET', 'POST'))
 def loginAccount():
     if request.method == 'POST':
-        Email = request.form['email']
-        Password = request.form['password']
+        email = request.form['email']
+        password = request.form['password']
     
-        if not Email:
+        if not email:
             flash("Enter your email!")
-        elif not Password:
+        elif not password:
             flash("Enter your password!")
         else:
-            if user_service.login(Email, Password) == True:
+            if user_service.login(email, password) == True:
                 return redirect(url_for('show_products'))
-            elif user_service.login(Email, Password) == None:
+            elif user_service.login(email, password) == False:
                 return redirect(url_for('signUp'))
             else:
-                flash("USER IS NOT FOUND!")
+                print("else")
+                return redirect(url_for('loginAccount'))
 
     return render_template('login.html')
 
-@app.route('/signup')
+@app.route('/signup', methods=('GET', 'POST'))
 def signUp():
+    users = user_service.get_all_users()
+    print(len(users))
+    
+    if request.method == 'POST':
+        firstname = request.form['fname']
+        lastname = request.form['lname']
+        email = request.form ['email']
+        password = request.form['password']
+        address = request.form['address']
+        phone = request.form['phone']
+        
+        if user_service.signUp(firstname, lastname, email, password,
+                               address, phone) == True:
+            print(email)
+            print(password)
+            return redirect(url_for('show_products'))
+        else:
+            print("False")
+            
     return render_template('signup.html')
 
 if __name__ == "__main__":
