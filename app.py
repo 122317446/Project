@@ -33,14 +33,22 @@ def loginAccount():
             flash("Enter your password!")
         else:
             if user_service.login(email, password) == True:
-                return redirect(url_for('show_products'))
+                #Add session code
+                session['user_email'] = email
+                return redirect(url_for('adminDash'))
             elif user_service.login(email, password) == False:
-                return redirect(url_for('signUp'))
+                session['user_email'] = email
+                return redirect(url_for('show_products'))
             else:
                 print("else")
                 return redirect(url_for('loginAccount'))
 
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user_email', None)  
+    return redirect(url_for('show_products'))
 
 @app.route('/signup', methods=('GET', 'POST'))
 def signUp():
@@ -64,6 +72,10 @@ def signUp():
             print("False")
             
     return render_template('signup.html')
+
+@app.route('/adminpage')
+def adminDash():
+    return render_template('adminPage.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

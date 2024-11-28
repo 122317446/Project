@@ -32,7 +32,6 @@ class UserService:
                     return False
         
         return None
-       
              
           
     def signUp(self, firstName, lastName, userEmail, userPassword, userAdress, userPhone):
