@@ -13,6 +13,17 @@ class Product:
         self.prodStock = prodStock
         self.uniqeAttribute = uniqeAttribute
         self.prodImage = prodImage
+
+    def to_dict(self):
+        return {
+            "prodID": self.prodID,
+            "prodName": self.prodName,
+            "prodDesc": self.prodDesc,
+            "prodPrice": self.prodPrice,
+            "prodStock": self.prodStock,
+            "uniqeAttribute": self.uniqeAttribute,
+            "prodImage": self.prodImage
+        }
         
 # abstract method will be passed, 
 # child classes will have their own implementation of the method (Polymorphism)
