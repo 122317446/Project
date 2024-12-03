@@ -36,7 +36,6 @@ def loginAccount():
             flash("Enter your password!")
         else:
             if user_service.login(email, password) == True:
-                #Add session code
                 session['user_email'] = email
                 return redirect(url_for('adminDash'))
             elif user_service.login(email, password) == False:
