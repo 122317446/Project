@@ -2,9 +2,9 @@
 
 {% block content %}
     <div class="col-md-6 login-form-1">
-        <h3>Create an account</h3>
+        <h3>Create an account</h3> 
         <br>
-        <form method = "post">
+        <form method = "post"> <!-- Form method is used to gather all the inputs -->
             <div class="form-group">
                 <input type="text" class="form-control" name="fname" placeholder="First name" value="{{request.form['fname']}}" />
             </div>
@@ -33,7 +33,7 @@
                 <input type="submit" class="btnSubmit" value="Create" />
             </div>
             <div class="form-group">
-                <a href="{{url_for('loginAccount')}}" class="noAccount">Already have an account? Click here</a>
+                <a href="{{url_for('loginAccount')}}" class="noAccount">Already have an account? Click here</a> <!-- If user has an account -> Login link -->
             </div>
         </form>
     </div>

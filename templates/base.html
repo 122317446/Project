@@ -18,7 +18,7 @@
         <!-- Linking files through Flask instead of HTML -->
     </head>
 
-    <body>
+    <body> <!-- This section is for enabling alerts -->
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           <div class="container my-4">
@@ -41,7 +41,7 @@
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{url_for('show_products')}}">Home</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
-                            {% if session['user_email'] %}
+                            {% if session['user_email'] %} <!-- A user session check. Signed-in has a different account dropdown to guest-->
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="#!">{{session.user_email}}</a></li>
                                     <li><hr class="dropdown-divider" /></li>
@@ -55,13 +55,12 @@
                                 </ul>
                             {% endif %}
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
                     </ul>
                     <form class="d-flex" action="/cart" method="get">
                         <button class="btn btn-outline-dark" type="submit">
                             <i class="bi-cart-fill me-1"></i>
                             Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">{{ cart_count }}</span>
+                            <span class="badge bg-dark text-white ms-1 rounded-pill">{{ cart_count }}</span> <!--Dynamic cart count -->
                         </button>
                     </form>
                 </div>
@@ -75,7 +74,6 @@
     <footer class="py-5 bg-dark" style="width: 100%; margin: 0;">
         <div style="text-align: center;">
             <p class="m-0 text-white">Copyright &copy; MTL 2024</p>
-            <p> <a href="{{url_for('adminDash')}}" class="text-white"> Admin </a> </p>
         </div>
     </footer>
     

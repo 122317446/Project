@@ -1,7 +1,7 @@
 from dao.ProductDAO import ProductDAO
 from model.Product import Product
 
-class ProductService:
+class ProductService: #ProductService class enables the utilisation of the database within the app.py 
     
     def __init__(self):
         self.product_dao = ProductDAO()

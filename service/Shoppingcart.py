@@ -1,13 +1,13 @@
 from service.Lineitem import*
 
-class ShoppingCart:
-    lineItems = []
+class ShoppingCart: 
+    lineItems = [] 
 
     def __init__(self):
-        self.lineItems = []
+        self.lineItems = [] #Empty list initialised
 
     def add_item(self, item: lineItem):
-        self.lineItems.append(item)
+        self.lineItems.append(item) #To add items to lineitems into cart
         
     def delete_item(self, product_id):
         # We will find the item by product ID and then remove it.
@@ -28,13 +28,13 @@ class ShoppingCart:
                 
     def cartTotal(self):
         cartPrice = 0.0
-        for lineItem in self.lineItems:
+        for lineItem in self.lineItems: #Loop is created to cycle through the total costs of each product
 
             cartPrice += lineItem.totalPrice
 
-        return convertNumberToPrice(cartPrice)
+        return convertNumberToPrice(cartPrice) #Using the function to get a final cost
     
-    def to_dict(self):
+    def to_dict(self): #Using dictionary conversion to fit both python and html format
         return {
             "lineItems": [item.to_dict() for item in self.lineItems],  # Serialize all line items
             "cartTotal": self.cartTotal(),  # Total price formatted as a string
@@ -42,7 +42,7 @@ class ShoppingCart:
     
     @staticmethod
     def from_dict(data):
-        """Reconstruct a ShoppingCart instance from a dictionary."""
+        #Reconstruct a ShoppingCart instance from a dictionary.
         cart = ShoppingCart()
         cart.lineItems = [
             lineItem(
@@ -50,4 +50,4 @@ class ShoppingCart:
                 itemQuantity=item['itemQuantity']
             ) for item in data.get('lineItems', [])
         ]
-        return cart
+        return cart #Cart format returned

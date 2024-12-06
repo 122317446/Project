@@ -2,7 +2,7 @@ from dao.UserDAO import UserDAO
 from model.User import User
 from validation.UserValidation import UserValidation
 
-class UserService:
+class UserService: #This class will handle the interaction between the DB and app.py
     
     def __init__(self):
         
@@ -44,7 +44,5 @@ class UserService:
             userToCreate = User(idcount, firstName, lastName, userEmail, userPassword, userAdress, userPhone, isAdmin=None)
             self.userDAO.createUser(userToCreate)
             return True
-            #Redirect user to homepage with the newly created account
         else:
-            #Alert or prompt user that account creation has failed
             return False

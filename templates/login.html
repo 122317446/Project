@@ -5,7 +5,7 @@
     <div class="col-md-6 login-form-1">
         <h3>Log-in to your account</h3>
         <br>
-        <form method = "post"> <!-- Using post method ensures Python can pull data from the inputs in order to be compared to the DB-->
+        <form method = "post"> <!-- Using form method ensures Python can pull data from the inputs in order to be compared to the DB-->
             <div class="form-group">
                 <input type="text" class="form-control" name="email" placeholder="Your Email *" value="{{request.form['email']}}" /> <!-- value is written through python in order to be referenced -->
             </div>

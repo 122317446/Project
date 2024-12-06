@@ -5,7 +5,7 @@ class ProductDAO:
     def __init__(self):
         
         self.products = [
-            #Creating the product list
+            #Creating the product data
             Product(1, 'Phillips Screwdriver', 'Handy screwdriver', 12, 50, 
                     ['Carbon-fibre', 'Excellent grip', 'Ratchet'], "A_Phillips_screwdriver_with_a_metallic_handle_and_.png"),
             Product(2, 'Dallas Mini-Driver', 'A small driver', 80, 40, 
@@ -23,7 +23,8 @@ class ProductDAO:
             Product(8, 'TAC Power generator', '2000W portable generator', 450, 100, 
                     ['Light-weight', 'Portable','Energy: B+'], "A_portable_TAC_Power_generator_with_a_2000W_capaci.png")
         ]
-
+    
+    #Fucntions to pull all / certain data
     def getAllProducts(self):
         return self.products
     

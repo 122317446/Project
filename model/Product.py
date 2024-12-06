@@ -1,5 +1,4 @@
 # importing abstract to make the class a parent
-'''from abc import ABC, abstractmethod'''
 
 class Product:
     # Attributes specific to all products
@@ -14,6 +13,7 @@ class Product:
         self.uniqeAttribute = uniqeAttribute
         self.prodImage = prodImage
 
+    #Converting product to a dictionary in order to use the shopping cart
     def to_dict(self):
         return {
             "prodID": self.prodID,
@@ -24,9 +24,3 @@ class Product:
             "uniqeAttribute": self.uniqeAttribute,
             "prodImage": self.prodImage
         }
-        
-# abstract method will be passed, 
-# child classes will have their own implementation of the method (Polymorphism)
-#    @abstractmethod
-#    def getPrice(self):
-#        pass
