@@ -3,13 +3,14 @@
 class Product:
     # Attributes specific to all products
     def __init__(self, prodID, prodName, prodDesc, prodPrice, 
-                 prodStock, uniqeAttribute, prodImage=None):
+                 prodStock, prodUsage, uniqeAttribute, prodImage=None):
         
         self.prodID = prodID
         self.prodName = prodName
         self.prodDesc = prodDesc
         self.prodPrice = prodPrice
         self.prodStock = prodStock
+        self.prodUsage = prodUsage
         self.uniqeAttribute = uniqeAttribute
         self.prodImage = prodImage
 
@@ -21,6 +22,7 @@ class Product:
             "prodDesc": self.prodDesc,
             "prodPrice": self.prodPrice,
             "prodStock": self.prodStock,
+            "prodUsage": self.prodUsage,
             "uniqeAttribute": self.uniqeAttribute,
             "prodImage": self.prodImage
         }

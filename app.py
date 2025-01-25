@@ -31,28 +31,27 @@ def loginAccount():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-    
-        if not email:
-            flash("Enter your email!") #Flashing to notify user
-        elif not password:
-            flash("Enter your password!")
-        else:
-            if user_service.login(email, password) == True:
-                session['user_email'] = email
-                return redirect(url_for('adminDash')) #If user is Admin -> redirect to the admin dashboard
-            elif user_service.login(email, password) == False:
-                session['user_email'] = email #If user is Customer -> redirect back to the product spread
-                return redirect(url_for('show_products'))
+        
+        user = user_service.login(email, password)
+        
+        if user:
+            session['user_firstName'] = user.firstName
+
+            if user.isAdmin:
+                return redirect(url_for('adminDash'))
             else:
-                flash("Invalid Email and password!")
+                return redirect(url_for('show_products')) #If user is Admin -> redirect to the admin dashboard
+        else:
+            flash("Invalid Email and password!")
 
     return render_template('login.html')
 
 @app.route('/logout')
 def logout(): #Function to pop (reset) the needed sessions back to guest, None is stated in order to pass through empty variables
-    session.pop('user_email', None)
+    session.pop('user_firstName', None)
     session.pop('shopping_cart', None) 
     session.pop('cart_count', None)
+    flash('Successfuly signed out!')
     return redirect(url_for('show_products'))
 
 @app.route('/signup', methods=('GET', 'POST')) #GET and POST will be called in order to enable FORM interactions
@@ -92,7 +91,7 @@ def adminDash():
 
 @app.route('/cart')
 def cart():
-    if 'user_email' not in session: #If program does not find a user is currently logged in through email session -> login first
+    if 'user_firstName' not in session: #If program does not find a user is currently logged in through email session -> login first
         return redirect(url_for('loginAccount'))
     else:
         #Ensure there's a cart in the session
@@ -116,7 +115,7 @@ def cart():
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
-    if 'user_email' not in session:
+    if 'user_firstName' not in session:
         return redirect(url_for('loginAccount'))
     else:
         #Ensure the cart exists in the session

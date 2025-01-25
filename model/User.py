@@ -4,7 +4,7 @@ class User: #Creating a User class
         
         #Initialising all the parameters
         self.userID = userID
-        self.firsName = firstName
+        self.firstName = firstName
         self.lastName = lastName
         self.userEmail = userEmail
         self.userAdress = userAdress
@@ -16,6 +16,15 @@ class User: #Creating a User class
             self.isAdmin = isAdmin
         else:
             self.isAdmin = False  
-            
-    
-        
+
+    def to_dict(self):
+        return {
+            "userID": self.userID,
+            "firstName": self.firstName,
+            "lastName": self.lastName,
+            "userEmail": self.userEmail,
+            "userPassword": self.userPassword,
+            "userAdress": self.userAdress,
+            "userPhone": self.userPhone,
+            "isAdmin": self.isAdmin,
+        }

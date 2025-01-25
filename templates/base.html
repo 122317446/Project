@@ -41,15 +41,13 @@
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{url_for('show_products')}}">Home</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
-                            {% if session['user_email'] %} <!-- A user session check. Signed-in has a different account dropdown to guest-->
+                            {% if session['user_firstName'] %} <!-- A user session check. Signed-in has a different account dropdown to guest-->
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#!">{{session.user_email}}</a></li>
-                                    <li><hr class="dropdown-divider" /></li>
                                     <li><a class="dropdown-item" href="{{url_for('logout')}}">Logout</a></li>
                                 </ul>
+                        <li class="nav-item"><a class="nav-link">{{session['user_firstName']}}</a></li>
                             {%else%}
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><hr class="dropdown-divider" /></li>
                                     <li><a class="dropdown-item" href="{{url_for('signUp')}}">Create Account</a></li>
                                     <li><a class="dropdown-item" href="{{url_for('loginAccount')}}">Login</a></li>
                                 </ul>

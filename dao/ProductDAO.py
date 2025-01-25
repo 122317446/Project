@@ -1,35 +1,71 @@
+import sqlite3
 from model.Product import Product
 
 class ProductDAO:
-           
-    def __init__(self):
+    def __init__(self, db_name="website.db"):
+        self.connection = sqlite3.connect(db_name, check_same_thread=False)
+        self.cursor = self.connection.cursor()
+        self._create_table()
+
+    def _create_table(self):
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS Product (
+                prodID INTEGER PRIMARY KEY AUTOINCREMENT,
+                prodName TEXT NOT NULL,
+                prodDesc TEXT,
+                prodPrice REAL NOT NULL,
+                prodStock INTEGER NOT NULL,
+                prodUsage TEXT NOT NULL,
+                uniqeAttribute TEXT NOT NULL,
+                prodImage TEXT
+            )
+        ''')
+        self.connection.commit()
+
+    def add_product(self, product):
+        self.cursor.execute(
+            '''
+            INSERT INTO Product (prodName, prodDesc, prodPrice, prodStock, prodUsage, uniqeAttribute, prodImage)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''',
+            (
+                product.prodName,
+                product.prodDesc,
+                product.prodPrice,
+                product.prodStock,
+                product.prodUsage,
+                ",".join(product.uniqeAttribute),
+                product.prodImage
+            )
+        )
+        self.connection.commit()
         
-        self.products = [
-            #Creating the product data
-            Product(1, 'Phillips Screwdriver', 'Handy screwdriver', 12, 50, 
-                    ['Carbon-fibre', 'Excellent grip', 'Ratchet'], "A_Phillips_screwdriver_with_a_metallic_handle_and_.png"),
-            Product(2, 'Dallas Mini-Driver', 'A small driver', 80, 40, 
-                    ['Modular', 'Made-in Dallas', 'Cordless'], "A_small_handheld_driver_called_Dallas_Mini-Driver,.png"),
-            Product(3, 'Pickaxe', 'Minecraft themed pickaxe', 100, 10, 
-                    ['Merch', 'Kid-friendly', 'Great gift'], "A_Minecraft-themed_pickaxe_with_a_stylized,_pixela.png"),
-            Product(4, 'TAC Excavator', 'Excavator with a crush power rated 9000', 10000, 12, 
-                    ['Non-modular', 'Safety: A', 'Transportable'], "A_powerful_excavator_with_a_rugged_design,_labeled.png"),
-            Product(5, 'Safety Helmet', 'Yellow safety helmet', 5, 30, 
-                    ['Light', 'Strong', 'Strapless'], "A_yellow_safety_helmet_with_a_strong_build_and_a_s.png"),
-            Product(6, 'TAC Drill Rig', 'Drill Rig capable of mining minerals like oil', 350000, 45, 
-                    ['Sturdy', 'Non-portable', '1000tonne limit'], "A_TAC_Drill_Rig_with_a_sturdy_structure,_capable_o.png"),
-            Product(7, 'Safety boots', 'Boots with good tread and traction', 50, 80, 
-                    ['Heavyduty', 'Fits all', 'Aggressive treading'], "A_pair_of_rugged_safety_boots_with_deep_tread_and_.png"),
-            Product(8, 'TAC Power generator', '2000W portable generator', 450, 100, 
-                    ['Light-weight', 'Portable','Energy: B+'], "A_portable_TAC_Power_generator_with_a_2000W_capaci.png")
-        ]
-    
-    #Fucntions to pull all / certain data
-    def getAllProducts(self):
-        return self.products
-    
-    def getProductbyID(self, prodID):
-        for product in self.products:
-            if product.prodID == prodID:
-                return product
+        product.prodID = self.cursor.lastrowid
+
+    def get_all_products(self):
+        self.cursor.execute("SELECT * FROM Product")
+        rows = self.cursor.fetchall()
+        return [Product(row[0], row[1], row[2], row[3], row[4], row[5], row[6].split(","), row[7]) for row in rows]
+
+    def get_product_by_id(self, prodID):
+        self.cursor.execute("SELECT * FROM Product WHERE prodID = ?", (prodID,))
+        row = self.cursor.fetchone()
+        if row:
+            return Product(row[0], row[1], row[2], row[3], row[4], row[5], row[6].split(","), row[7])
         return None
+
+    def update_product(self, product):
+        self.cursor.execute('''
+            UPDATE Product
+            SET prodName = ?, prodDesc = ?, prodPrice = ?, prodStock = ?, prodUsage = ?, uniqeAttribute = ?, prodImage = ?
+            WHERE prodID = ?
+        ''', (product.prodName, product.prodDesc, product.prodPrice, product.prodStock, product.prodUsage,
+              ",".join(product.uniqeAttribute), product.prodImage, product.prodID))
+        self.connection.commit()
+
+    def delete_product(self, prodID):
+        self.cursor.execute("DELETE FROM Product WHERE prodID = ?", (prodID,))
+        self.connection.commit()
+
+    def close_connection(self):
+        self.connection.close()
