@@ -11,7 +11,7 @@ class ProductService:
         return self.product_dao.get_product_by_id(prodID)
 
     def add_product(self, product):
-        self.product_dao.add_product(product)
+        return self.product_dao.add_product(product)
 
     def update_product(self, product):
         self.product_dao.update_product(product)

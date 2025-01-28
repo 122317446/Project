@@ -1,15 +1,17 @@
 #Importing the needed libraries
 from urllib import request
 
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from service.ProductService import ProductService
 from service.UserService import UserService
 from service.Shoppingcart import*
+from API_routes import api_routes
 
 import os, random
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24) #Secret key is needed in order to enable dynamic user interactions
+app.register_blueprint(api_routes)
 product_service = ProductService() 
 user_service = UserService()
 #Calling the needed service classes
@@ -186,6 +188,100 @@ def update_cart():
     
     return redirect(url_for('cart'))
 
+
+# CRUD operations for Admin
+
+# PRODUCT CRUD
+#--------------
+# CREATE
+@app.route('/create_product', methods=['POST'])
+def create_product():
+    try:
+        print("Create Product Request Received")
+        print("Form Data:", request.form)
+
+        # Convert form data into a Product object
+        new_product = Product(
+            None,  # Auto-incremented in DB
+            request.form.get('prodName', ''),
+            request.form.get('prodDesc', ''),
+            float(request.form.get('prodPrice', 0)),
+            int(request.form.get('prodStock', 0)),
+            request.form.get('prodUsage', ''),
+            request.form.get('uniqeAttribute', '').split(','),  # Convert CSV string to list
+            request.files['prodImage'].filename if 'prodImage' in request.files else None
+        )
+
+        # Pass the Product object to ProductService
+        new_product_id = product_service.add_product(new_product)
+
+        return jsonify({"message": "Product created successfully!", "prodID": new_product_id}), 201
+
+    except Exception as e:
+        print("Error creating product:", str(e))  # Log error
+        return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
+
+# RETREIVE
+@app.route('/manage_product')
+def manage_product():
+    products = product_service.get_all_products()
+    return render_template('manageProd.html', products=products)
+
+# UPDATE
+@app.route('/update_product/<int:prodID>', methods=['POST'])
+def update_product(prodID):
+    try:
+        print(f"Update Request Received for Product ID: {prodID}")
+
+        # Retrieve the product from the database
+        product = product_service.get_product_details(prodID)
+        if not product:
+            return jsonify({"message": "Product not found!"}), 404
+
+        # Update product details
+        product.prodName = request.form.get('prodName', '')
+        product.prodDesc = request.form.get('prodDesc', '')
+        product.prodPrice = float(request.form.get('prodPrice', 0))
+        product.prodStock = int(request.form.get('prodStock', 0))
+        product.prodUsage = request.form.get('prodUsage', '')
+        product.uniqeAttribute = request.form.get('uniqeAttribute', '').split(',')
+
+        # Handle image update (if a new image is uploaded)
+        if 'prodImage' in request.files:
+            prodImage = request.files['prodImage']
+            if prodImage.filename:
+                image_filename = prodImage.filename
+                prodImage.save(f"static/images/{image_filename}")
+                product.prodImage = image_filename  # Update product image if changed
+
+        # Now pass the Product object to ProductService
+        product_service.update_product(product)
+
+        return jsonify({"message": "Product updated successfully!"}), 200
+
+    except Exception as e:
+        print("Error updating product:", str(e))
+        return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
+
+# DELETE
+@app.route('/delete_product/<int:prodID>', methods=['DELETE'])
+def delete_product(prodID):
+    try:
+        print(f"Delete Request Received for Product ID: {prodID}")
+
+        # Check if product exists before deletion
+        product = product_service.get_product_details(prodID)
+        if not product:
+            return jsonify({"message": "Product not found!"}), 404
+
+        # Delete the product
+        product_service.delete_product(prodID)
+
+        return jsonify({"message": "Product deleted successfully!"}), 200
+
+    except Exception as e:
+        print("Error deleting product:", str(e))
+        return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
 
 
 if __name__ == "__main__":

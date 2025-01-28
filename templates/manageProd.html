@@ -1,0 +1,158 @@
+{% extends 'adminBase.html' %}
+
+{% block content %}
+<!-- Manage product layout -->
+<section style="background-color: #f8f9fa; padding: 20px;">
+    <div class="container">
+        <!-- Page Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1 style="font-size: 28px; font-weight: bold;">Product Information</h1>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProductModal">+ Create</button>
+        </div>
+
+        <!-- Create Product Modal -->
+        <div class="modal fade" id="createProductModal" tabindex="-1" aria-labelledby="createProductModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createProductModalLabel">Create Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createProductForm">
+                            <div class="mb-3">
+                                <label class="form-label">Product Name</label>
+                                <input type="text" class="form-control" id="create-prod-name" name="prodName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" id="create-prod-desc" name="prodDesc" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Price (€)</label>
+                                <input type="number" step="0.01" class="form-control" id="create-prod-price" name="prodPrice" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Stock</label>
+                                <input type="number" class="form-control" id="create-prod-stock" name="prodStock" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Usage</label>
+                                <input type="text" class="form-control" id="create-prod-usage" name="prodUsage" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Attributes (comma-separated)</label>
+                                <input type="text" class="form-control" id="create-prod-attributes" name="uniqeAttribute" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Product Image</label>
+                                <input type="file" class="form-control" id="create-prod-image" name="prodImage">
+                            </div>
+                            <button type="submit" class="btn btn-success">Create</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Product List -->
+        <table style="width: 100%; border-collapse: collapse; background-color: #fff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <thead>
+                <tr style="background-color: #007bff; color: #fff; text-align: left;">
+                    <th style="padding: 10px;">Image</th>
+                    <th style="padding: 5px;">Product Name</th>
+                    <th style="padding: 5px;">Product Price</th>
+                    <th style="padding: 5px;">Quantity</th>
+                    <th style="padding: 10px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 10px;">
+                        <img src="{{ url_for('static', filename='images/' + product.prodImage) }}" 
+                            alt="Product Image" 
+                            style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                    </td>
+                    <td style="padding: 5px;">{{ product.prodName }}</td>
+                    <td style="padding: 5px;">€{{ product.prodPrice }}</td>
+                    <td style="padding: 5px;">{{ product.prodStock }}</td>
+
+                    <td style="padding: 10px;">
+                        <button class="btn btn-primary edit-btn" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#editProductModal"
+                                data-prod-id="{{ product.prodID }}"
+                                data-prod-name="{{ product.prodName }}"
+                                data-prod-desc="{{ product.prodDesc }}"
+                                data-prod-price="{{ product.prodPrice }}"
+                                data-prod-stock="{{ product.prodStock }}"
+                                data-prod-usage="{{ product.prodUsage }}"
+                                data-prod-attributes="{{ product.uniqeAttribute | join(',') }}">
+                            Edit
+                        </button>
+                        
+                        <button class="btn btn-danger delete-btn" data-prod-id="{{ product.prodID }}">
+                            - Delete
+                        </button>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Modal: Edit Product -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProductForm">
+                    <input type="hidden" id="edit-prod-id" name="prodID">
+                    
+                    <div class="mb-3">
+                        <label for="edit-prod-name" class="form-label">Product Name</label>
+                        <input type="text" id="edit-prod-name" name="prodName" "class=form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-prod-desc" class="form-label">Description</label>
+                        <textarea id="edit-prod-desc" name="prodDesc" class="form-control" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-prod-price" class="form-label">Price (€)</label>
+                        <input type="number" id="edit-prod-price" name="prodPrice" class="form-control" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-prod-stock" class="form-label">Stock</label>
+                        <input type="number" id="edit-prod-stock" name="prodStock" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-prod-usage" class="form-label">Usage</label>
+                        <input type="text" id="edit-prod-usage" name="prodUsage" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-prod-attributes" class="form-label">Attributes (comma-separated)</label>
+                        <input type="text" id="edit-prod-attributes" name="uniqeAttribute" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-warning">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 5px; padding: 20px; text-align: right; margin-right: 66px;">
+    <button style="background-color: #6c757d; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-right: 10px;">Return</button>
+    <button style="background-color:rgb(250, 124, 7); color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-right: 10px;">Cancel</button>
+    <button style="background-color: #28a745; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Confirm</button>
+</div>
+
+
+{% endblock %}

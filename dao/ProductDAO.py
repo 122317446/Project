@@ -4,6 +4,7 @@ from model.Product import Product
 class ProductDAO:
     def __init__(self, db_name="website.db"):
         self.connection = sqlite3.connect(db_name, check_same_thread=False)
+        self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
         self._create_table()
 
@@ -24,23 +25,16 @@ class ProductDAO:
 
     def add_product(self, product):
         self.cursor.execute(
-            '''
-            INSERT INTO Product (prodName, prodDesc, prodPrice, prodStock, prodUsage, uniqeAttribute, prodImage)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-            ''',
-            (
-                product.prodName,
-                product.prodDesc,
-                product.prodPrice,
-                product.prodStock,
-                product.prodUsage,
-                ",".join(product.uniqeAttribute),
-                product.prodImage
-            )
+            '''INSERT INTO Product (prodName, prodDesc, prodPrice, prodStock, prodUsage, uniqeAttribute, prodImage) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)''',
+            (product.prodName, product.prodDesc, product.prodPrice, product.prodStock, product.prodUsage, 
+            ",".join(product.uniqeAttribute), product.prodImage)
         )
         self.connection.commit()
         
+        
         product.prodID = self.cursor.lastrowid
+        return product.prodID  
 
     def get_all_products(self):
         self.cursor.execute("SELECT * FROM Product")
@@ -66,6 +60,26 @@ class ProductDAO:
     def delete_product(self, prodID):
         self.cursor.execute("DELETE FROM Product WHERE prodID = ?", (prodID,))
         self.connection.commit()
+    
+    def filter_products(self, usage, price_min, price_max, sort_order):
+        # Construct the SQL query
+        query = '''
+            SELECT * FROM Product
+            WHERE prodUsage LIKE ?
+            AND prodPrice BETWEEN ? AND ?
+            ORDER BY prodPrice {}
+        '''.format('ASC' if sort_order == 'asc' else 'DESC')
+
+        # Execute the query
+        self.cursor.execute(query, (f"%{usage}%", price_min, price_max))
+        rows = self.cursor.fetchall()
+
+        # Convert rows to Product objects
+        return [
+            Product(row['prodID'], row['prodName'], row['prodDesc'], row['prodPrice'],
+                    row['prodStock'], row['prodUsage'], row['uniqeAttribute'].split(','), row['prodImage'])
+            for row in rows
+        ]
 
     def close_connection(self):
         self.connection.close()

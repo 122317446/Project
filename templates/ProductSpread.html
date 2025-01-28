@@ -10,14 +10,59 @@
                 </div>
             </div>
         </header>
-        <!-- Section-->
+
+        <!-- Filtering Section -->
+        <section class="py-3">
+            <div class="container px-4 px-lg-5">
+                <div class="row">
+                    <div class="col-12">
+                        <form id="filter-form" class="d-flex flex-wrap justify-content-between mb-4">
+                            <!-- Usage Filter -->
+                            <div class="form-group me-3">
+                                <label for="filter-usage" class="form-label">Usage</label>
+                                <select id="filter-usage" class="form-select">
+                                    <option value="">All</option>
+                                    <option value="Hand-tool">Hand Tool</option>
+                                    <option value="Machinery">Machinery</option>
+                                    <option value="Electrical">Electrical</option>
+                                </select>
+                            </div>
+
+                            <!-- Price Range Filter -->
+                            <div class="form-group me-3">
+                                <label for="filter-price-min" class="form-label">Min Price</label>
+                                <input type="number" id="filter-price-min" class="form-control" placeholder="0">
+                            </div>
+                            <div class="form-group me-3">
+                                <label for="filter-price-max" class="form-label">Max Price</label>
+                                <input type="number" id="filter-price-max" class="form-control" placeholder="1000000">
+                            </div>
+
+                            <!-- Sort Order -->
+                            <div class="form-group me-3">
+                                <label for="sort-order" class="form-label">Sort By</label>
+                                <select id="sort-order" class="form-select">
+                                    <option value="asc">Price: Low to High</option>
+                                    <option value="desc">Price: High to Low</option>
+                                </select>
+                            </div>
+
+                            <!-- Apply Filters Button -->
+                            <div class="form-group">
+                                <button id="apply-filters" type="button" class="btn btn-primary mt-4">Apply Filters</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Product Grid -->
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-
+                <div id="product-grid" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                     {% for product in products %} 
-                    <!-- For loop is made to cycle through the whole DB to show the products in the webpage -->
-
+                    <!-- For loop to cycle through products -->
                     <div class="col mb-5">
                         <div class="card h-100">
                             <!-- Product image-->
@@ -37,7 +82,7 @@
                             </div>
                         </div>
                     </div>
-                    {% endfor %} <!-- Ending the loop -->
+                    {% endfor %}
                 </div>
             </div>
         </section>
