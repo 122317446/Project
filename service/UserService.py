@@ -9,6 +9,9 @@ class UserService:
 
     def get_all_users(self):
         return self.userDAO.get_all_users()
+    
+    def get_user_details(self, userID):
+        return self.userDAO.get_user_by_id(userID)
 
     def login(self, email, password):
         user = self.userDAO.get_user_by_email(email)

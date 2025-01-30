@@ -1,0 +1,139 @@
+{% extends 'adminBase.html' %}
+
+{% block content %}
+<!-- Manage Users Layout -->
+<section style="background-color: #f8f9fa; padding: 20px;">
+    <div class="container">
+        <!-- Page Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1 style="font-size: 28px; font-weight: bold;">User Information</h1>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createUserModal">+ Create User</button>
+        </div>
+
+        <!-- User List Table -->
+        <table style="width: 100%; border-collapse: collapse; background-color: #fff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <thead>
+                <tr style="background-color: #007bff; color: #fff; text-align: left;">
+                    <th style="padding: 5px;">First Name</th>
+                    <th style="padding: 5px;">Last Name</th>
+                    <th style="padding: 5px;">Email</th>
+                    <th style="padding: 5px;">Home Address</th>
+                    <th style="padding: 5px;">Phone Number</th>
+                    <th style="padding: 5px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 5px;">{{ user.firstName }}</td>
+                    <td style="padding: 5px;">{{ user.lastName }}</td>
+                    <td style="padding: 5px;">{{ user.userEmail }}</td>
+                    <td style="padding: 5px;">{{ user.userAdress }}</td>
+                    <td style="padding: 5px;">{{ user.userPhone }}</td>
+
+                    <td style="padding: 10px;">
+                        <button class="btn btn-primary edit-user-btn" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#editUserModal"
+                                data-user-id="{{ user.userID }}"
+                                data-user-firstname="{{ user.firstName }}"
+                                data-user-lastname="{{ user.lastName }}"
+                                data-user-email="{{ user.userEmail }}"
+                                data-user-address="{{ user.userAdress }}"
+                                data-user-phone="{{ user.userPhone }}">
+                            Edit
+                        </button>
+                        
+                        <button class="btn btn-danger delete-user-btn" data-user-id="{{ user.userID }}">
+                            - Delete
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Modal: Create User -->
+<div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createUserModalLabel">Create User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createUserForm">
+                    <div class="mb-3">
+                        <label for="create-user-firstname" class="form-label">First Name</label>
+                        <input type="text" id="create-user-firstname" name="firstName" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="create-user-lastname" class="form-label">Last Name</label>
+                        <input type="text" id="create-user-lastname" name="lastName" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="create-user-email" class="form-label">Email</label>
+                        <input type="email" id="create-user-email" name="userEmail" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="create-user-address" class="form-label">Home Address</label>
+                        <input type="text" id="create-user-address" name="userAdress" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="create-user-phone" class="form-label">Phone Number</label>
+                        <input type="text" id="create-user-phone" name="userPhone" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Edit User -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm">
+                    <input type="hidden" id="edit-user-id" name="userID">
+                    <div class="mb-3">
+                        <label for="edit-user-firstname" class="form-label">First Name</label>
+                        <input type="text" id="edit-user-firstname" name="firstName" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-user-lastname" class="form-label">Last Name</label>
+                        <input type="text" id="edit-user-lastname" name="lastName" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-user-email" class="form-label">Email</label>
+                        <input type="email" id="edit-user-email" name="userEmail" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-user-address" class="form-label">Home Address</label>
+                        <input type="text" id="edit-user-address" name="userAdress" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-user-phone" class="form-label">Phone Number</label>
+                        <input type="text" id="edit-user-phone" name="userPhone" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 5px; padding: 20px; text-align: right; margin-right: 66px;">
+    <button class="btn btn-secondary">Return</button>
+    <button class="btn btn-warning">Cancel</button>
+    <button class="btn btn-success">Confirm</button>
+</div>
+
+{% endblock %}

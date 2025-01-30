@@ -1,4 +1,5 @@
 #Importing the needed libraries
+import requests
 from urllib import request
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
@@ -20,6 +21,27 @@ user_service = UserService()
 def show_products():
     products = product_service.get_all_products()
     return render_template('productSpread.html', products=products)
+
+@app.route('/api/stoic-quote', methods=['GET'])
+def get_stoic_quote():
+    try:
+        api_url = "https://stoic.tekloon.net/stoic-quote"
+        response = requests.get(api_url)
+
+        if response.status_code == 200:
+            data = response.json()  # Directly parse JSON
+            print("DEBUG: API Response:", data)  # Debugging step
+            
+            # Return the response exactly as received
+            return jsonify(data), 200
+        else:
+            print(f"DEBUG: API Error - Status Code {response.status_code}")
+            return jsonify({"error": "Failed to fetch quote"}), response.status_code
+    except Exception as e:
+        print("DEBUG: Exception occurred:", str(e))
+        return jsonify({"error": "Internal Server Error", "details": str(e)}), 500
+
+
 
 @app.route('/Product/<int:prodID>') #Webpage for individual product
 def select_product(prodID): #By using the product ID, it enables the app to gather the needed specific information
@@ -191,7 +213,7 @@ def update_cart():
 
 # CRUD operations for Admin
 
-# PRODUCT CRUD
+# PRODUCT & USER CRUD
 #--------------
 # CREATE
 @app.route('/create_product', methods=['POST'])
@@ -226,6 +248,10 @@ def create_product():
 def manage_product():
     products = product_service.get_all_products()
     return render_template('manageProd.html', products=products)
+@app.route('/manage_user')
+def manage_user():
+    users = user_service.get_all_users()
+    return render_template('manageUser.html', users=users)
 
 # UPDATE
 @app.route('/update_product/<int:prodID>', methods=['POST'])
@@ -262,6 +288,31 @@ def update_product(prodID):
     except Exception as e:
         print("Error updating product:", str(e))
         return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
+@app.route('/update_user/<int:userID>', methods=['POST'])
+def update_user(userID):
+    try:
+        print(f"Update Request Received for User ID: {userID}")
+
+        # Retrieve user from DB
+        user = user_service.get_user_details(userID)
+        if not user:
+            return jsonify({"message": "User not found!"}), 404
+
+        # Update user details
+        user.firstName = request.form.get('firstName', '')
+        user.lastName = request.form.get('lastName', '')
+        user.userEmail = request.form.get('userEmail', '')
+        user.userAdress = request.form.get('userAdress', '')
+        user.userPhone = request.form.get('userPhone', '')
+
+        # Call service to update user
+        user_service.update_user(user)
+
+        return jsonify({"message": "User updated successfully!"}), 200
+
+    except Exception as e:
+        print("Error updating user:", str(e))
+        return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
 
 # DELETE
 @app.route('/delete_product/<int:prodID>', methods=['DELETE'])
@@ -282,6 +333,25 @@ def delete_product(prodID):
     except Exception as e:
         print("Error deleting product:", str(e))
         return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
+@app.route('/delete_user/<int:userID>', methods=['DELETE'])
+def delete_user(userID):
+    try:
+        print(f"Delete Request Received for User ID: {userID}")
+
+        # Check if user exists before deletion
+        user = user_service.get_user_details(userID)
+        if not user:
+            return jsonify({"message": "User not found!"}), 404
+
+        # Delete user
+        user_service.delete_user(userID)
+
+        return jsonify({"message": "User deleted successfully!"}), 200
+
+    except Exception as e:
+        print("Error deleting user:", str(e))
+        return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
+
 
 
 if __name__ == "__main__":

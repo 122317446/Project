@@ -29,6 +29,13 @@ class UserDAO:
         rows = self.cursor.fetchall()
         return [User(row['userID'], row['firstName'], row['lastName'], row['userEmail'], row['userPassword'], row['userAdress'], row['userPhone'], bool(row['isAdmin'])) for row in rows]
 
+    def get_user_by_id(self, userID):
+        self.cursor.execute("SELECT * FROM User WHERE userID = ?", (userID,))
+        row = self.cursor.fetchone()
+        if row:
+            return User(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+        return None
+    
     def get_user_by_email(self, email):
         self.cursor.execute("SELECT * FROM User WHERE userEmail = ?", (email,))
         row = self.cursor.fetchone()
