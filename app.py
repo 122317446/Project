@@ -17,10 +17,11 @@ product_service = ProductService()
 user_service = UserService()
 #Calling the needed service classes
 
-@app.route('/') #The index named as productSpread
+# ----- Homepage / base routing ----- #
+@app.route('/') #The index / homepage
 def show_products():
     products = product_service.get_all_products()
-    return render_template('productSpread.html', products=products)
+    return render_template('index.html', products=products)
 
 @app.route('/api/stoic-quote', methods=['GET'])
 def get_stoic_quote():
@@ -51,13 +52,14 @@ def search():
         suggestions = []
     return jsonify([product.to_dict() for product in suggestions]) #Used Flask to_dict() in order to return values correctly
 
-@app.route('/Product/<int:prodID>') #Webpage for individual product
+@app.route('/product/<int:prodID>') #Webpage for individual product
 def select_product(prodID): #By using the product ID, it enables the app to gather the needed specific information
     product = product_service.get_product_details(prodID)
     products = product_service.get_all_products()
     random_products = random.sample(products, k=4) #This will randomise the other products to offer below the viewed product
-    return render_template('Product.html', product=product, products=random_products)
+    return render_template('product.html', product=product, products=random_products)
 
+# ----- User Login, Logout, Signup routing  ----- #
 @app.route('/login', methods=('GET', 'POST')) #GET and POST will be called in order to enable FORM interactions
 def loginAccount():
     if request.method == 'POST':
@@ -117,10 +119,7 @@ def signUp():
             
     return render_template('signup.html')
 
-@app.route('/adminpage') #Webpage for admin dashbaord
-def adminDash():
-    return render_template('adminPage.html')
-
+# ----- Cart routing ----- #
 @app.route('/cart')
 def cart():
     if 'user_firstName' not in session: #If program does not find a user is currently logged in through email session -> login first
@@ -219,7 +218,10 @@ def update_cart():
     return redirect(url_for('cart'))
 
 
-# CRUD operations for Admin
+# ----- Admin page routing  ----- #
+@app.route('/adminpage') #Webpage for admin dashbaord
+def adminDash():
+    return render_template('adminPage.html')
 
 # PRODUCT & USER CRUD
 #--------------
@@ -252,18 +254,18 @@ def create_product():
         return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
 
 # RETREIVE
-@app.route('/manage_product')
-def manage_product():
+@app.route('/manageProd')
+def manageProd():
     products = product_service.get_all_products()
-    return render_template('manageProd.html', products=products)
-@app.route('/manage_user')
-def manage_user():
+    return render_template('adminProd.html', products=products)
+@app.route('/manageUser')
+def manageUser():
     users = user_service.get_all_users()
-    return render_template('manageUser.html', users=users)
+    return render_template('adminUser.html', users=users)
 
 # UPDATE
-@app.route('/update_product/<int:prodID>', methods=['POST'])
-def update_product(prodID):
+@app.route('/updateProd/<int:prodID>', methods=['POST'])
+def updateProd(prodID):
     try:
         print(f"Update Request Received for Product ID: {prodID}")
 
@@ -296,8 +298,8 @@ def update_product(prodID):
     except Exception as e:
         print("Error updating product:", str(e))
         return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
-@app.route('/update_user/<int:userID>', methods=['POST'])
-def update_user(userID):
+@app.route('/updateUser/<int:userID>', methods=['POST'])
+def updateUser(userID):
     try:
         print(f"Update Request Received for User ID: {userID}")
 
@@ -323,8 +325,8 @@ def update_user(userID):
         return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
 
 # DELETE
-@app.route('/delete_product/<int:prodID>', methods=['DELETE'])
-def delete_product(prodID):
+@app.route('/deleteProd/<int:prodID>', methods=['DELETE'])
+def deleteProd(prodID):
     try:
         print(f"Delete Request Received for Product ID: {prodID}")
 
@@ -341,8 +343,8 @@ def delete_product(prodID):
     except Exception as e:
         print("Error deleting product:", str(e))
         return jsonify({"message": "Internal Server Error", "error": str(e)}), 500
-@app.route('/delete_user/<int:userID>', methods=['DELETE'])
-def delete_user(userID):
+@app.route('/deleteUser/<int:userID>', methods=['DELETE'])
+def deleteUser(userID):
     try:
         print(f"Delete Request Received for User ID: {userID}")
 
