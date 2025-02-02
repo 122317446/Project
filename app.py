@@ -41,7 +41,15 @@ def get_stoic_quote():
         print("DEBUG: Exception occurred:", str(e))
         return jsonify({"error": "Internal Server Error", "details": str(e)}), 500
 
-
+@app.route('/search', methods=['GET'])
+def search():
+    products = product_service.get_all_products()
+    query = request.args.get('q', '').lower()
+    if query:
+        suggestions = [product for product in products if query in product.prodName.lower()]
+    else:
+        suggestions = []
+    return jsonify([product.to_dict() for product in suggestions]) #Used Flask to_dict() in order to return values correctly
 
 @app.route('/Product/<int:prodID>') #Webpage for individual product
 def select_product(prodID): #By using the product ID, it enables the app to gather the needed specific information

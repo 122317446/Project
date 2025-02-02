@@ -10891,3 +10891,21 @@ textarea.form-control-lg {
   top: 13px;
   }
   
+.search-container {
+  position: relative;
+  padding-right: 10px;
+}
+
+#suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 10px; /* Explicitly leave a 10px gap on the right */
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  box-sizing: border-box; /* Ensures any added padding won't affect the width */
+}
